@@ -44,29 +44,33 @@ public class ThreeSumClosest {
         Arrays.sort(nums);
         int closestSum = Integer.MAX_VALUE; // this is always the worst outcome
         int bestDiff = Integer.MAX_VALUE;
-        int left = 0;
-        int right = nums.length -1;
-        while (left < right) {
-            int leftRightSum = nums[left] + nums[right];
-            for (int i = left + 1; i < right; i++) {
-                int threeSum = leftRightSum + nums[i];
-                int absDiff =  Math.abs(target - threeSum);
 
-                if (absDiff == 0) return threeSum;
+        for (int i = 0; i < nums.length; i++) {
+            int left = i + 1;
+            int right = nums.length - 1;
 
-                if (absDiff < bestDiff) {
-                    bestDiff = absDiff;
-                    closestSum = threeSum;
+            while (left < right) {
+                int currSum =  nums[i] + nums[left] + nums[right];
+
+                if (currSum == target) {
+                    return currSum;
                 }
-            }
 
-            if (leftRightSum > target) {
-                right--;
-            } else {
-                left++;
+                if (Math.abs(currSum - target) < bestDiff) {
+                    bestDiff = Math.abs(currSum - target);
+                    closestSum = currSum;
+                }
+
+
+                if (currSum > target) {
+                    right--;
+                } else {
+                    left++;
+                }
             }
         }
         return closestSum;
+
     }
 
 
@@ -77,7 +81,7 @@ public class ThreeSumClosest {
         List<Integer> path = new ArrayList<>();
         dfs(nums, path, target, 0);
 
-        System.out.println("returning closest sum: " + closestSum);
+        isClosestSumInit = true; // reset class variable (sloppy but oh well)
         return closestSum;
     }
 
@@ -101,21 +105,8 @@ public class ThreeSumClosest {
             isClosestSumInit = true;
         } else {
             boolean isNewSumCloser = Math.abs(newSum - target) < Math.abs(closestSum - target);
-            System.out.printf("is new sum %d closer: " + isNewSumCloser + "\n", newSum);
             if (isNewSumCloser) closestSum = newSum;
-            System.out.println("closestSum is now: " + closestSum);
         }
     }
 
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
-
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
-    }
 }
