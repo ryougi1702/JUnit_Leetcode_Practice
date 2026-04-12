@@ -2,6 +2,7 @@ package leetcode;//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 //
@@ -37,9 +38,41 @@ import java.util.List;
 //        -1000 <= nums[i] <= 1000
 //        -104 <= target <= 104
 public class ThreeSumClosest {
+
+    public int twoPointerSolution(int[] nums, int target) {
+
+        Arrays.sort(nums);
+        int closestSum = Integer.MAX_VALUE; // this is always the worst outcome
+        int bestDiff = Integer.MAX_VALUE;
+        int left = 0;
+        int right = nums.length -1;
+        while (left < right) {
+            int leftRightSum = nums[left] + nums[right];
+            for (int i = left + 1; i < right; i++) {
+                int threeSum = leftRightSum + nums[i];
+                int absDiff =  Math.abs(target - threeSum);
+
+                if (absDiff == 0) return threeSum;
+
+                if (absDiff < bestDiff) {
+                    bestDiff = absDiff;
+                    closestSum = threeSum;
+                }
+            }
+
+            if (leftRightSum > target) {
+                right--;
+            } else {
+                left++;
+            }
+        }
+        return closestSum;
+    }
+
+
     boolean isClosestSumInit = false;
     int closestSum;
-    public int threeSumClosest(int[] nums, int target) {
+    public int dfsSolution(int[] nums, int target) {
 
         List<Integer> path = new ArrayList<>();
         dfs(nums, path, target, 0);
@@ -47,7 +80,6 @@ public class ThreeSumClosest {
         System.out.println("returning closest sum: " + closestSum);
         return closestSum;
     }
-
 
     private void dfs(int[] nums, List<Integer> path, int target, int currIndex) {
         if (path.size() == 3) {
